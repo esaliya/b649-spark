@@ -17,17 +17,29 @@ public class SparkWordCount {
                 ("WordCount");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
+        // Create RDD from the text file - parallelized over lines.
         JavaRDD<String> textFile = sc.textFile("file://" + args[0] +
                 "/src/main/resources/wc/words.txt");
-        JavaRDD<String> words = textFile.flatMap(new FlatMapFunction<String, String>() {
-            public Iterable<String> call(String s) { return Arrays.asList(s.split(" ")); }
-        });
-        JavaPairRDD<String, Integer> pairs = words.mapToPair(new PairFunction<String, String, Integer>() {
-            public Tuple2<String, Integer> call(String s) { return new Tuple2<String, Integer>(s, 1); }
-        });
-        JavaPairRDD<String, Integer> counts = pairs.reduceByKey(new Function2<Integer, Integer, Integer>() {
-            public Integer call(Integer a, Integer b) { return a + b; }
-        });
+
+        // Transform textFile RDD into an RDD representing a collection of words
+        // That is, each line is split using space, so the parallelization is
+        // now over the words.
+        JavaRDD<String> words = textFile.flatMap((FlatMapFunction<String,
+                String>) s -> Arrays.asList(s.split(" ")));
+
+        // Transform words RDD into a pair RDD. A pair RDD is just a special
+        // type of an RDD to represent parallel collections containing keys
+        // and values.
+        JavaPairRDD<String, Integer> pairs = words.mapToPair((PairFunction
+                <String, String, Integer>) s -> new Tuple2<>(s, 1));
+
+        // Perform reduction on the pair RDD. Note. in Spark's terminology
+        // reduction is an action where as previous operations are
+        // transformations.
+        JavaPairRDD<String, Integer> counts = pairs.reduceByKey((Function2
+                <Integer, Integer, Integer>) (a, b) ->
+                a + b);
+
         counts.saveAsTextFile("file://" + args[0] +
                 "/src/main/resources/wc/output");
     }
