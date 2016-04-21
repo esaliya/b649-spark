@@ -29,7 +29,7 @@ import java.util.Arrays;
 
 public class SparkWordCount {
     public static void main(String[] args) {
-        SparkConf conf = new SparkConf().setMaster("local[2]").setAppName
+        SparkConf conf = new SparkConf().setAppName
                 ("WordCount");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
