@@ -29,6 +29,6 @@ public class SparkWordCount {
             public Integer call(Integer a, Integer b) { return a + b; }
         });
         counts.saveAsTextFile("file://" + args[0] +
-                "/src/main/resources/wc/words.count.txt");
+                "/src/main/resources/wc/output");
     }
 }
