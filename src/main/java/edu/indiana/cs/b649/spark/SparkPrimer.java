@@ -15,6 +15,6 @@ public class SparkPrimer {
         List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
         JavaRDD<Integer> distData = sc.parallelize(data);
         int x = distData.reduce((i,j) -> i+j);
-        System.out.println(x);
+        System.out.println("\n**Reduced Output = " + x + "\n");
     }
 }
