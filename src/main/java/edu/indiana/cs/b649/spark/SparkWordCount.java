@@ -17,8 +17,8 @@ public class SparkWordCount {
                 ("WordCount");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
-        JavaRDD<String> textFile = sc.textFile("file://" +
-                "./src/main/resources/wc/words.txt");
+        JavaRDD<String> textFile = sc.textFile("file://" + args[0] +
+                "/src/main/resources/wc/words.txt");
         JavaRDD<String> words = textFile.flatMap(new FlatMapFunction<String, String>() {
             public Iterable<String> call(String s) { return Arrays.asList(s.split(" ")); }
         });
@@ -28,6 +28,7 @@ public class SparkWordCount {
         JavaPairRDD<String, Integer> counts = pairs.reduceByKey(new Function2<Integer, Integer, Integer>() {
             public Integer call(Integer a, Integer b) { return a + b; }
         });
-        counts.saveAsTextFile("file://./src/main/resources/wc/words.count.txt");
+        counts.saveAsTextFile("file://" + args[0] +
+                "/src/main/resources/wc/words.count.txt");
     }
 }
