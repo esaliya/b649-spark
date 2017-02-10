@@ -30,7 +30,7 @@ import java.util.Arrays;
 public class SparkWordCount {
     public static void main(String[] args) {
         SparkConf conf = new SparkConf().setAppName
-                ("WordCount");
+                ("WordCount").setMaster("local[*]");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
         // Create RDD from the text file - parallelized over lines.

@@ -24,7 +24,7 @@ public class SparkKMeans {
 
         for (int i = 0; i < iterations; ++i) {
             Broadcast<double[][]> centers = sc.broadcast(initialCenters);
-
+            // TODO - complete
         }
 
     }
