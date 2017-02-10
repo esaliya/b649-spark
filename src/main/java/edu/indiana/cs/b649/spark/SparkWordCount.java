@@ -25,10 +25,14 @@ import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
 import scala.Tuple2;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 public class SparkWordCount {
     public static void main(String[] args) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         SparkConf conf = new SparkConf().setAppName
                 ("WordCount").setMaster("local[*]");
         JavaSparkContext sc = new JavaSparkContext(conf);
@@ -57,6 +61,6 @@ public class SparkWordCount {
                 a + b);
 
         counts.saveAsTextFile("file://" + args[0] +
-                "/src/main/resources/wc/output");
+                "/src/main/resources/wc/output/" + dateFormat.format(new Date()));
     }
 }
